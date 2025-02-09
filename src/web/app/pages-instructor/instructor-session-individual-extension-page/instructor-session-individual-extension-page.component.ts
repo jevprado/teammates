@@ -501,12 +501,15 @@ export class InstructorSessionIndividualExtensionPageComponent implements OnInit
     this.isAllInstructorsSelected = numInstructorsSelected === numInstructors;
   }
 
-  sortStudentColumnsBy(by: SortBy): void {
-    this.sortStudentsBy = by;
-    this.sortStudentOrder = this.sortStudentOrder === SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC;
+  sortStudentColumnsBy(by: SortBy, order?: SortOrder): void {
+    if (order) {
+      this.sortStudentOrder = order;
+    } else {
+      this.sortStudentOrder = this.sortStudentOrder === SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC;
+    }
     this.studentsOfCourse.sort(this.sortStudentPanelsBy(by));
   }
-
+  
   getAriaSortStudent(by: SortBy): string {
     if (by !== this.sortStudentsBy) {
       return 'none';
@@ -531,8 +534,8 @@ export class InstructorSessionIndividualExtensionPageComponent implements OnInit
           strB = b.sectionName;
           break;
         case SortBy.TEAM_NAME:
-          strA = a.sectionName;
-          strB = b.sectionName;
+          strA = a.teamName; //correcao do codigo (sectionName -> teamName) 
+          strB = b.teamName; //correcao do codigo (sectionName -> teamName)
           break;
         case SortBy.RESPONDENT_NAME:
           strA = a.name;

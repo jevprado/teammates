@@ -10,6 +10,7 @@ import {
 import {
   InstructorSessionIndividualExtensionPageModule,
 } from './instructor-session-individual-extension-page.module';
+import { SortBy, SortOrder } from '../../../types/sort-properties';
 import { CourseService } from '../../../services/course.service';
 import { FeedbackSessionsService } from '../../../services/feedback-sessions.service';
 import { InstructorService } from '../../../services/instructor.service';
@@ -32,6 +33,8 @@ import {
   ResponseVisibleSetting,
   SessionVisibleSetting,
 } from '../../../types/api-request';
+
+
 
 describe('InstructorSessionIndividualExtensionPageComponent', () => {
   const testCourse: Course = {
@@ -161,6 +164,70 @@ describe('InstructorSessionIndividualExtensionPageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should sort students by team name in ascending order', () => {
+    component.studentsOfCourse = [
+      {
+        email: 'student1@test.com',
+        name: 'jose',
+        teamName: 'Team 2',
+        sectionName: 'Section 1',
+        extensionDeadline: 1000,
+        hasExtension: false,
+        isSelected: false,
+        hasSubmittedSession: false
+      },
+      {
+        email: 'student2@test.com',
+        name: 'eduardo',
+        teamName: 'Team 1',
+        sectionName: 'Section 2',
+        extensionDeadline: 2000,
+        hasExtension: false,
+        isSelected: false,
+        hasSubmittedSession: false
+      }
+    ];
+    
+    component.sortStudentOrder = SortOrder.DESC;
+    component.sortStudentColumnsBy(SortBy.TEAM_NAME); 
+    
+    console.log('Current order:', component.sortStudentOrder);
+    console.log('Sorted array:', component.studentsOfCourse.map(s => s.teamName));
+    
+    expect(component.studentsOfCourse[0].teamName).toBe('Team 1');
+    expect(component.studentsOfCourse[1].teamName).toBe('Team 2');
+  });
+
+  it('should sort students by team name in descending order', () => {
+    component.studentsOfCourse = [
+      {
+        email: 'student1@test.com',
+        name: 'jose',
+        teamName: 'Team 1',
+        sectionName: 'Section 1',
+        extensionDeadline: 1000,
+        hasExtension: false,
+        isSelected: false,
+        hasSubmittedSession: false
+      },
+      {
+        email: 'student2@test.com',
+        name: 'eduardo',
+        teamName: 'Team 2',
+        sectionName: 'Section 2',
+        extensionDeadline: 2000,
+        hasExtension: false,
+        isSelected: false,
+        hasSubmittedSession: false
+      }
+    ];
+    component.sortStudentOrder = SortOrder.ASC; 
+    component.sortStudentColumnsBy(SortBy.TEAM_NAME); 
+    
+    expect(component.studentsOfCourse[0].teamName).toBe('Team 2');
+    expect(component.studentsOfCourse[1].teamName).toBe('Team 1');
   });
 
   it('should snap with student loading', () => {
